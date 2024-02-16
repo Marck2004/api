@@ -1,5 +1,7 @@
 const express = require("express");
+const rutasFrutas = require("./rutas/frutas");
 const app = express();
+const mongoose = require("mongoose");
 
 app.use(
     express.urlencoded({
@@ -7,18 +9,7 @@ app.use(
     })
 )
 app.use(express.json());
-app.get("/todos",(req,res)=>{
-    console.log(req.body);
-    return res.send("Enviado");
-})
-app.get("/",(req,res)=>{
-    console.log(req.body);
-    return res.send("Ruta barra");
-})
-app.post("/todos",(req,res)=>{
-    console.log(req.body);
-})
-
+app.use(rutasFrutas);
 const port = 7777;
 
 app.listen(port, ()=>{
