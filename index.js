@@ -1,42 +1,40 @@
 const express = require("express");
-const rutasFrutas = require("./rutas/frutas");
+const rutaPeliculas = require("./rutas/peliculas");
 const app = express();
 const mongoose = require("mongoose");
+const config = require('./config');
+var cors = require('cors');  //módulo para permitir CORS
 
 app.use(
     express.urlencoded({
         extended:true
     })
 )
+app.use(cors());
 app.use(express.json());
-app.use(rutasFrutas);
-const port = 7777;
 
-const mongoUri = "mongodb://mongodb:6666/2daw";
+const mongoUri = `mongodb://${config.DB_SERVICE}:${config.DB_PORT}/${config.DB_DATABASE}?authSource=admin`;
 let db = mongoose.connection;
-
+console.log(mongoUri);
 let connectWithRetry= function() {
-    return mongoose.connect(mongoUri, {
-      useUnifiedTopology: true,
-      useNewUrlParser: true,
-      auth: { authSource: "admin" },
-      user: "root",
-      pass: "example",
-    });
-  };  
+  return mongoose.connect(mongoUri, {
+    user: config.DB_USERNAME,
+    pass: config.DB_PASSWORD,
+  });
+};
 
   connectWithRetry();  // se crea la conexión
 
   db.on('error', () => {   // si hay un fallo de la conexión se vuelve a intentar pasado un tiempo
       setTimeout(() => {
-          console.log('Fallo en la conexión a la BBD. Se reintenta.');
+          console.log('Fallo en la conexión a la BBDD. Se reintenta.');
           connectWithRetry();
         }, config.DB_RETRY_TIME);
   });
   
   db.on('connected', () => { // si hay conexión
 
-    app.use(routerHeroes);  //se cargan las rutas
+    app.use(rutaPeliculas);  //se cargan las rutas
     
     // Si se pide una ruta invalida se devuelve un 404
     app.use(function(req, res, next) {
@@ -49,6 +47,6 @@ let connectWithRetry= function() {
       res.status(500).send('Upss, algo no funciona');  
     })
 
-app.listen(port, ()=>{
-    console.log("Servidor corriendo en http://localhost");
+app.listen(config.PORT, ()=>{
+    console.log(`Todo OK. Servidor escuchando en ${config.PORT}!`);
 })
