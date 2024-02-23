@@ -3,6 +3,7 @@ require("../modelos/usuarios");
 const mongoose = require("mongoose");
 const usuarios = mongoose.model("Usuarios");
 const jwt = require("jwt-simple");
+const createToken = require("../servicios");
 
 async function getUsuarios(req,res){
     const nombre = req.body.nombre;
@@ -16,9 +17,9 @@ async function getUsuarios(req,res){
         }
 
         if (contrasenia == usuarioAutenticado.contrasenia && nombre == usuarioAutenticado.nombre) {
-            const token = jwt.sign({ id: usuarioAutenticado._id }, config.SECRET_TOKEN, { expiresIn: '1d' });
+            const token = createToken(usuarioAutenticado);
 
-            return res.status(200).json({ token:token,status: "ok" });
+            return res.status(200).json({ usuario:usuarioAutenticado,token:token,status: "ok" });
         }
     } catch (error) {
         return res.status(400).send({ status: "failure" });
