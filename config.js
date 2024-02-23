@@ -8,5 +8,6 @@ module.exports = {
     DB_PORT: process.env.db_port || 7777,
     DB_DATABASE: process.env.db_database || 'Peliculas',
     DB_USERNAME: process.env.db_username || 'root',
-    DB_PASSWORD: process.env.db_password || 'example'
+    DB_PASSWORD: process.env.db_password || 'example',
+    SECRET_TOKEN: "miclavedetokens"
   }

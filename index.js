@@ -1,5 +1,6 @@
 const express = require("express");
 const rutaPeliculas = require("./rutas/peliculas");
+const rutaUsuarios = require("./rutas/usuarios");
 const app = express();
 const mongoose = require("mongoose");
 const config = require('./config');
@@ -15,7 +16,7 @@ app.use(express.json());
 
 const mongoUri = `mongodb://${config.DB_SERVICE}:${config.DB_PORT}/${config.DB_DATABASE}?authSource=admin`;
 let db = mongoose.connection;
-console.log(mongoUri);
+
 let connectWithRetry= function() {
   return mongoose.connect(mongoUri, {
     user: config.DB_USERNAME,
@@ -35,6 +36,7 @@ let connectWithRetry= function() {
   db.on('connected', () => { // si hay conexión
 
     app.use(rutaPeliculas);  //se cargan las rutas
+    app.use(rutaUsuarios)
     
     // Si se pide una ruta invalida se devuelve un 404
     app.use(function(req, res, next) {

@@ -29,5 +29,19 @@ async function addPeliculas(req,res){
         });
     }
 }
+async function eliminarPelicula(req, res) {
+  try {
+    const nombre = req.params.nombre;
+    const peliculaEliminada = await Pelicula.findOneAndDelete({ nombre: nombre });
+    if (!peliculaEliminada) {
+      return res.status(404).json({ status: 'error' });
+    }
+    return res.json({ status: 'ok' });
+  } catch (error) {
+    console.error('Error al eliminar la película:', error);
+    return res.status(500).json({ status: 'error con servidor' });
+  }
+  
+};
 
-module.exports = { getPeliculas,addPeliculas };
+module.exports = { getPeliculas,addPeliculas,eliminarPelicula };
