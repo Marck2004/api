@@ -14,6 +14,12 @@ const usuariosSchema = new Schema({
         type:String,
         required: true
     },
+    email:{
+        type:String
+    },
+    telefono:{
+        type:Number
+    },
     estado:{
         type:String
     }

@@ -12,10 +12,6 @@ async function getUsuarios(req,res){
     try {
         const usuarioAutenticado = await usuarios.findOne({ nombre: nombre, contrasenia: contrasenia });
 
-        if (!usuarioAutenticado) {
-            return res.status(401).json({ status: "Credenciales incorrectas" });
-        }
-
         if (contrasenia == usuarioAutenticado.contrasenia && nombre == usuarioAutenticado.nombre) {
             const token = createToken(usuarioAutenticado);
 
@@ -25,7 +21,28 @@ async function getUsuarios(req,res){
         return res.status(400).send({ status: "failure" });
     }
 }
+async function devolverUsuarios(req,res){
+    try{
+        const usuariosLeidos = await usuarios.find({});
+        return res.status(200).send(usuariosLeidos && usuariosLeidos.length ? usuariosLeidos : []);
+    }catch(error){
+        return res.status(400).send({
+            status:"failure"
+        });
+    }
+}
+async function modifUsuario(req,res){
+    const id = req.body._id;
 
+    try {
+        const usuarioAutenticado = await usuarios.updateOne({_id:id},req.body);
+
+            return res.status(200).json({ usuario:usuarioAutenticado,status: "ok" });
+
+    } catch (error) {
+        return res.status(400).send({ status: "failure" });
+    }
+}
 async function addUsuario(req,res){
     try{
         console.log(req.body);
@@ -56,4 +73,4 @@ async function removeUsuario(req, res) {
   
 };
 
-module.exports = { getUsuarios,addUsuario,removeUsuario };
+module.exports = { getUsuarios,addUsuario,removeUsuario,devolverUsuarios,modifUsuario };

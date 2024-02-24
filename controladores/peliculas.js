@@ -32,7 +32,7 @@ async function addPeliculas(req,res){
 async function eliminarPelicula(req, res) {
   try {
     const nombre = req.params.nombre;
-    const peliculaEliminada = await Pelicula.findOneAndDelete({ nombre: nombre });
+    const peliculaEliminada = await peliculas.findOneAndDelete({ nombre: nombre });
     if (!peliculaEliminada) {
       return res.status(404).json({ status: 'error' });
     }

@@ -2,11 +2,11 @@ version: "3.3"
 services:
   mongodb:
     container_name: mongodb
-    image: mongo
+    image: mongo:5.0
     volumes:
-      - ./mongodb:/data/db
+      - ./mongodb3:/data/db
     ports:
-      - "7777:27017"
+      - 7777:27017
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=example
