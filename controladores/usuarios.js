@@ -5,10 +5,11 @@ const usuarios = mongoose.model("Usuarios");
 const jwt = require("jwt-simple");
 const createToken = require("../servicios");
 
-async function getUsuarios(req,res){
+async function login(req,res){
+    console.log(req.body);
     const nombre = req.body.nombre;
     const contrasenia = req.body.contrasenia;
-
+    
     try {
         const usuarioAutenticado = await usuarios.findOne({ nombre: nombre, contrasenia: contrasenia });
 
@@ -87,4 +88,4 @@ async function removeUsuario(req, res) {
   
 };
 
-module.exports = { getUsuarios,addUsuario,removeUsuario,devolverUsuarios,modifUsuario };
+module.exports = { login,addUsuario,removeUsuario,devolverUsuarios,modifUsuario };

@@ -1,17 +1,18 @@
 const config = require("../config");
 async function crearOrden (req,res){ 
+    console.log(req.body);
     const orden = {
         intent:"CAPTURE",
         purchase_units:[
             {
                 amount: {
-                    currency_code: "USD",
-                    value: "100.00"
+                    currency_code: "EUR",
+                    value: "100"
                 }
             }
         ],
         application_context: {
-            brand_name: "Mi tienda",
+            brand_name: "Cines World",
             landing_page: "NO_PREFERENCE",
             user_action: "PAY_NOW",
             return_url: `http://localhost:${config.PORT}/capturar-orden`,
@@ -38,15 +39,6 @@ async function crearOrden (req,res){
     
     const data = await response.json();
     const accesoToken = data.access_token;
-    console.log(data.access_token);
-
-    /*
-        const response = await axios.post(``${config.PAYPAL_API}/v2/checkout/orders`,order,{
-            headers:{
-                Authorization: `Bearer ${acces_token}`
-            }
-        })
-    */ 
 
         const autorizacion = await fetch(`${config.PAYPAL_API}/v2/checkout/orders`, {
             method: "POST",
@@ -58,23 +50,12 @@ async function crearOrden (req,res){
         });
         
         const vistaAutorizacion = await autorizacion.json();
-        console.log(vistaAutorizacion);
 
     return res.json(vistaAutorizacion);
 };
 
 async function capturarOrden(req,res) {
     const { token } = req.query;
-
-    /*
-        const response = await axios.post(`${config.PAYPAL_API}/v2/checkout/orders/${token}/capture`,
-        null,{
-            auth:{
-               username: config.PAYPAL_API_CLIENT,
-            password: config.PAYPAL_API_SECRET 
-            }
-        })
-    */
 
         const response = await fetch(`${config.PAYPAL_API}/v2/checkout/orders/${token}/capture`, {
             method: "POST",
@@ -84,13 +65,12 @@ async function capturarOrden(req,res) {
             }
         });
     const datosDevueltos = await response.json();
-    console.log(datosDevueltos);
 
-    return res.json("pagado");
+    res.redirect("http://localhost:4200/compraRealizada");
 };
 
 function cancelarOrden (req,res) {
-    res.send("cancel creada")
+    res.redirect("/");
 };
 
 module.exports = {crearOrden,capturarOrden,cancelarOrden};

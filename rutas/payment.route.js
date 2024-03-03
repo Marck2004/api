@@ -3,7 +3,7 @@ const controller = require("../controladores/payment.controller");
 const router = express.Router();
 
 
-router.get("/crear-orden",controller.crearOrden);
+router.post("/crear-orden",controller.crearOrden);
 router.get("/capturar-orden",controller.capturarOrden);
 router.get("/cancelar-orden", controller.cancelarOrden);
 
