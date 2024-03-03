@@ -4,13 +4,16 @@ const rutaUsuarios = require("./rutas/usuarios");
 const app = express();
 const mongoose = require("mongoose");
 const config = require('./config');
+const metodoPago = require("./rutas/payment.route");
 var cors = require('cors');  //módulo para permitir CORS
+
 
 app.use(
     express.urlencoded({
         extended:true
     })
 )
+app.use(metodoPago);
 app.use(cors());
 app.use(express.json());
 

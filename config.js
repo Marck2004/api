@@ -1,3 +1,7 @@
+
+const dotenv = require("dotenv");
+dotenv.config();
+
 module.exports = {
     NODE_ENV: process.env.NODE_ENV || 'development',
     HOST: process.env.HOST || '127.0.0.1',
@@ -9,5 +13,8 @@ module.exports = {
     DB_DATABASE: process.env.db_database || 'Peliculas',
     DB_USERNAME: process.env.db_username || 'root',
     DB_PASSWORD: process.env.db_password || 'example',
-    SECRET_TOKEN: "miclavedetokens"
+    SECRET_TOKEN: "miclavedetokens",
+    PAYPAL_API_CLIENT : process.env.PAYPAL_API_CLIENT,
+    PAYPAL_API_SECRET : process.env.PAYPAL_API_SECRET,
+    PAYPAL_API : 'https://api-m.sandbox.paypal.com'
   }

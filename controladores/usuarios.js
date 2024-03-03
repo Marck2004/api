@@ -35,9 +35,16 @@ async function modifUsuario(req,res){
     const id = req.body._id;
 
     try {
-        const usuarioAutenticado = await usuarios.updateOne({_id:id},req.body);
+        console.log(req.body);
+        if(req.body.contrasenia.length < 8 || !req.body.email.includes("@gmail.com") || (req.body.telefono < 100000000 || req.body.telefono > 999999999) || req.body.nombre == ""){
+            return res.status(403).send({
+                status:"incorrecta validacion"
+            });
+        }else{
+            const usuarioAutenticado = await usuarios.updateOne({_id:id},req.body);
 
             return res.status(200).json({ usuario:usuarioAutenticado,status: "ok" });
+        }
 
     } catch (error) {
         return res.status(400).send({ status: "failure" });
@@ -46,11 +53,17 @@ async function modifUsuario(req,res){
 async function addUsuario(req,res){
     try{
         console.log(req.body);
+        if(req.body.contrasenia.length < 8 || !req.body.email.includes("@gmail.com") || (req.body.telefono < 100000000 || req.body.telefono > 999999999) || req.body.nombre == ""){
+            return res.status(403).send({
+                status:"incorrecta validacion"
+            });
+        }else{
         const usuario = req.body;
         await new usuarios(usuario).save();
         return res.status(200).send({
             status:"ok"
         });
+    }
     }catch(error){
         console.log(req.body);
         return res.status(400).send({
@@ -58,10 +71,11 @@ async function addUsuario(req,res){
         });
     }
 }
+
 async function removeUsuario(req, res) {
   try {
     const nombre = req.params.nombre;
-    const usuarioEliminado = await Pelicula.findOneAndDelete({ nombre: nombre });
+    const usuarioEliminado = await usuarios.findOneAndDelete({ nombre: nombre });
     if (!usuarioEliminado) {
       return res.status(404).json({ status: 'error' });
     }
